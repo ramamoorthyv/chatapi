@@ -1,0 +1,15 @@
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+*.swp
+*.DS_Store
+*.vs/
+*.vscode/
+appsettings.json
+appsettings.Development.json
+Properties/launchSettings.json
