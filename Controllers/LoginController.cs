@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using chatapi.Data;
 using chatapi.Models;
 using chatapi.Helpers;
+using chatapi.Helpers.Jwt;
 
 namespace chatapi.Controllers;
 
@@ -11,10 +12,12 @@ namespace chatapi.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly IConfiguration _configuration;
 
-    public LoginController(ApplicationDbContext context)
+    public LoginController(ApplicationDbContext context, IConfiguration configuration)
     {
         _context = context;
+        _configuration = configuration;
     }
     
     public async Task<IActionResult> Login(Login loginModel)
@@ -25,7 +28,9 @@ public class LoginController : ControllerBase
         {
             return Unauthorized(message);
         }
-        return Ok(new { message = "Login successful", token =  123});
+        var token = new JwtGen(_configuration);
+        return Ok(new { message = "Login successful", token =  token.GenerateJwtToken(user.Email)});
 
     }
+
 }
