@@ -33,7 +33,12 @@ public class MessageController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMessage(int id)
     {
-        return Ok(await _context.Messages.FindAsync(id));
+        var message = await _context.Messages.FindAsync(id);
+        if(message == null)
+        {
+            return NotFound();
+        }
+        return Ok(message);
     }
 
     [HttpPut("{id}")]
@@ -44,13 +49,5 @@ public class MessageController : ControllerBase
         return Ok(message);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteMessage(int id)
-    {
-        var message = await _context.Messages.FindAsync(id);
-        _context.Messages.Remove(message);
-        await _context.SaveChangesAsync();
-        return Ok(message);
-    }
 }
 

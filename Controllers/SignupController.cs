@@ -25,4 +25,5 @@ public class SignupController : ControllerBase
         await _context.SaveChangesAsync();
         return Ok(user);
     }
+    
 }
