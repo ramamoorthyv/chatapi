@@ -20,7 +20,8 @@ public class MessageController : ControllerBase
     public async Task<IEnumerable<Message>> GetMessages()
     {
         Console.WriteLine("GetMessages called");
-        return await _context.Messages.ToListAsync();
+        var result = await _context.Messages.ToListAsync();
+        return result;
         
     }
     [HttpPost]
