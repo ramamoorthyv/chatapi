@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace chatapi.Controllers;
 
@@ -9,11 +10,16 @@ namespace chatapi.Controllers;
 [Authorize]
 public class ProfileController : ControllerBase
 {
+    private readonly HttpContext _httpContext;
+    public ProfileController(IHttpContextAccessor httpContextAccessor){
+        _httpContext = httpContextAccessor.HttpContext;
+    }
     
     [HttpGet("{id}")]
     public IActionResult GetMessage(int id)
     {
-        return Ok("Profile " + id);
+        var username = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+        return Ok("Hello " + username);
     }
 
 }
