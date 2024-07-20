@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chatapi.Data;
 using chatapi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace chatapi.Controllers;
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class MessageController : ControllerBase
@@ -34,7 +35,7 @@ public class MessageController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMessage(int id)
     {
-        var message = await _context.Messages.FindAsync(id);
+        var message = await _context.Messages.Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
         if(message == null)
         {
             return NotFound();
