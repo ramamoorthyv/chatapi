@@ -23,7 +23,7 @@ public class MessageController : ControllerBase
         Console.WriteLine("GetMessages called");
         var result = await _context.Messages.ToListAsync();
         return result;
-        
+
     }
     [HttpPost]
     public async Task<IActionResult> CreateMessage(Message message)
@@ -35,12 +35,19 @@ public class MessageController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMessage(int id)
     {
-        var message = await _context.Messages.Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
-        if(message == null)
+        var message = await _context.Messages.Include(m => m.FromUser).Include(m => m.ToUser).FirstOrDefaultAsync(m => m.Id == id);
+        var result = new
+        {
+            messageId = message.Id,
+            content = message.Content,
+            from = message.FromUser.Firstname,
+            to = message.ToUser.Firstname
+        };
+        if (message == null)
         {
             return NotFound();
         }
-        return Ok(message);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]

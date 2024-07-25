@@ -4,8 +4,12 @@ namespace chatapi.Models
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt {get; set;}
-        public int UserId {get; set;}
-        
-        public User User { get; set; }
+
+        public int From { get; set;}
+        public int To { get; set; }
+
+         public User FromUser { get; set; }
+        public User ToUser { get; set; }
+       
     }
 }
