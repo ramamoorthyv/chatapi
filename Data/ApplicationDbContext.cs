@@ -19,13 +19,13 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Message>()
             .HasOne(m => m.FromUser)
             .WithMany(u => u.SentMessages)
-            .HasForeignKey(m => m.From)
+            .HasForeignKey(m => m.FromUserId)
             .OnDelete(DeleteBehavior.Restrict); // Prevents cascade delete
 
         modelBuilder.Entity<Message>()
             .HasOne(m => m.ToUser)
             .WithMany(u => u.ReceivedMessages)
-            .HasForeignKey(m => m.To)
+            .HasForeignKey(m => m.ToUserId)
             .OnDelete(DeleteBehavior.Restrict); // Prevents cascade delete
     }
 }
