@@ -41,7 +41,7 @@ public class MessageController : ControllerBase
             messageId = message.Id,
             content = message.Content,
             from = message.FromUser.Firstname,
-            to = message.ToUser.Firstname
+            to = message.ToUser.Firstname,
         };
         if (message == null)
         {
