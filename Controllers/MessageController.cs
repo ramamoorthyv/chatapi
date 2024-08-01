@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using chatapi.Data;
 using chatapi.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace chatapi.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class MessageController : ControllerBase
+public class MessageController : BaseController
 {
     private readonly ApplicationDbContext _context;
 
@@ -28,6 +29,7 @@ public class MessageController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateMessage(Message message)
     {
+        message.FromUserId = GetCurrentUserId();
         _context.Messages.Add(message);
         await _context.SaveChangesAsync();
         return Ok(message);

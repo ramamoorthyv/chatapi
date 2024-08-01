@@ -29,7 +29,7 @@ public class LoginController : ControllerBase
             return Unauthorized(message);
         }
         var token = new JwtGen(_configuration);
-        return Ok(new { message = "Login successful", token =  token.GenerateJwtToken(user.Email)});
+        return Ok(new { message = "Login successful", token =  token.GenerateJwtToken(user.Email, user.Id)});
 
     }
 

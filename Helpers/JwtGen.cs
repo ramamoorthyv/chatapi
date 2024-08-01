@@ -11,12 +11,13 @@ public class JwtGen
     public JwtGen(IConfiguration config){
         _configuration = config;
     }
-     public string GenerateJwtToken(string username)
+     public string GenerateJwtToken(string username, int userId)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim("Username", username),
+                new Claim("UserId", userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
