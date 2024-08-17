@@ -19,12 +19,25 @@ public class MessageController : BaseController
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Message>> GetMessages()
+    public async Task<ActionResult<IEnumerable<Message>>> GetMessages([FromQuery] string type)
     {
-        Console.WriteLine("GetMessages called");
-        var result = await _context.Messages.ToListAsync();
-        return result;
+        var currentUserId = GetCurrentUserId();
+        IQueryable<Message> query = _context.Messages;
 
+        if (string.Equals(type, "sent"))
+        {
+            query = query.Include(m => m.ToUser).Where(i => i.FromUserId == currentUserId);
+        }
+        else if (string.Equals(type, "received"))
+        {
+            query = query.Include(m => m.FromUser).Where(i => i.FromUserId == currentUserId);
+        }
+        else
+        {
+            return BadRequest("Invalid request");
+        }
+        var messages = string.Equals(type, "sent") ? await query.Select(p => new { p.Id, p.Content, p.ToUser.Firstname, p.ToUser.Lastname }).ToListAsync() : await query.Select(p => new { p.Id, p.Content, p.FromUser.Firstname, p.FromUser.Lastname }).ToListAsync();
+        return Ok(messages);
     }
     [HttpPost]
     public async Task<IActionResult> CreateMessage(Message message)
